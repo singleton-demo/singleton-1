@@ -36,6 +36,6 @@ jobs:
         - npm install --registry https://registry.npmjs.org
         - npm link
         - cd $TRAVIS_BUILD_DIR/devops/test/client/jscoresdk
-        - npm link @singleton/singleton-core-sdk
         - npm install --registry https://registry.npmjs.org
+        - npm link @vip/vip-core-sdk-server
         - ./node_modules/.bin/jest
