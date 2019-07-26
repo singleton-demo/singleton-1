@@ -17,6 +17,7 @@ jobs:
         - npm run test
     - stage: auto test
       script:
+        - mkdir -p g11n-js-client
         - shopt -s extglob
         - mv !(g11n-js-client) g11n-js-client/
         - mv .npmignore g11n-js-client/
