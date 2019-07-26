@@ -24,14 +24,14 @@ jobs:
         - cd $TRAVIS_BUILD_DIR/g11n-ws && ./gradlew build
     - stage: code scan
       script:
-        - git clone --branch=devops https://github.com/vmware/singleton.git devops
-        - python $TRAVIS_BUILD_DIR/devops/sonar/configsonar.py $SONAR_ORG:singleton-service:$TRAVIS_BRANCH $SONAR_ORG:singleton-service:$TRAVIS_BRANCH $SONAR_ORG service-gate $SONAR_TOKEN
-        - cd $TRAVIS_BUILD_DIR/g11n-ws && sed -i "s/vip/$SONAR_ORG:singleton-service:$TRAVIS_BRANCH/" settings.gradle && cat settings.gradle
-        - cd $TRAVIS_BUILD_DIR/g11n-ws && gradle sonarqube --stacktrace -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=$SONAR_ORG -Dsonar.branch.name=master --info
+        - git clone --branch=devops https://github.com/singleton-demo/singleton-1.git devops
+        - python $TRAVIS_BUILD_DIR/devops/sonar/config_sonar_project.py $SONAR_ORG:singleton-service:$TRAVIS_BRANCH $SONAR_ORG:singleton-service:$TRAVIS_BRANCH $SONAR_ORG service-gate $SONAR_TOKEN
+        - cd $TRAVIS_BUILD_DIR/g11n-ws && sed -i "s/rootProject.name = 'vip'/rootProject.name = '$SONAR_ORG:singleton-service:$TRAVIS_BRANCH'/" settings.gradle && cat settings.gradle
+        - cd $TRAVIS_BUILD_DIR/g11n-ws && ./gradlew sonarqube --stacktrace -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=$SONAR_ORG -Dsonar.branch.name=master --info
         - cd $TRAVIS_BUILD_DIR/devops/sonar && chmod 777 checkSonarQualityGateByAPI && ./checkSonarQualityGateByAPI -ProjectKeyPrefixArray=$SONAR_ORG:singleton-service:$TRAVIS_BRANCH
     - stage: auto test
       script:
-        - git clone --branch=devops https://github.com/vmware/singleton.git devops
+        - git clone --branch=devops https://github.com/singleton-demo/singleton-1.git devops
         - cd $TRAVIS_BUILD_DIR/g11n-ws && ./gradlew build
         - cp $TRAVIS_BUILD_DIR/devops/deploy/i18n-service/Dockerfile $TRAVIS_BUILD_DIR/publish/
         - cd $TRAVIS_BUILD_DIR/publish && mv vip-manager-i18n-*.jar i18n-service.jar
