@@ -1,0 +1,36 @@
+dist: trusty
+language: node_js
+addons:
+  sonarcloud:
+    organization: $SONAR_ORG
+    token:
+      secure: $SONAR_TOKEN
+node_js:
+  - "7"
+python:
+  - "3.4"
+jobs:
+  include:
+    - stage: unit test
+      script:
+        - npm install --registry https://registry.npmjs.org
+        - npm run test
+        - npm link
+    - stage: auto test
+      script:
+        - git clone --branch=server https://github.com/singleton-demo/ci.git server
+        - git clone --branch=devops https://github.com/singleton-demo/singleton-1.git devops
+        - cd ./server/build && rm -rf ./BOOT-INF/classes/l10n/bundles/* && rm -f ./resources.zip
+        - cp -a ../../devops/test/bundles/JSCoreSDKTest ./BOOT-INF/classes/l10n/bundles/
+        - cd BOOT-INF/classes && zip -r ../../resources.zip l10n && cd ../..
+        - jar -cvf0m service.jar ./META-INF/MANIFEST.MF ./org/ ./BOOT-INF/ ./resources.zip
+        - cp service.jar ../
+        - cd ..
+        - docker build -t singleton .
+        - docker run -d -p 8090:8090 --name singleton singleton
+        - docker ps
+        - cd ..
+        - cd test/client/jscoresdk
+        - npm install --registry https://registry.npmjs.org
+        - npm link  @singleton/singleton-core-sdk
+        - ./node_modules/.bin/jest
