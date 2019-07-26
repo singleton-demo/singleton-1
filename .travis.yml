@@ -17,6 +17,9 @@ jobs:
         - npm run test
     - stage: auto test
       script:
+        - shopt -s extglob
+        - mv !(g11n-js-client) g11n-js-client/
+        - mv .npmignore g11n-js-client/
         - git clone --branch=master https://github.com/singleton-demo/singleton-1.git service
         - git clone --branch=devops https://github.com/singleton-demo/singleton-1.git devops
         - mkdir -p service/g11n-ws/vip-manager-i18n/src/main/resources/l10n/bundles/
@@ -28,6 +31,7 @@ jobs:
         - docker run -d -p 8090:8090 --name singleton singleton
         - docker ps
         - cd $TRAVIS_BUILD_DIR
+        - cd g11n-js-client
         - npm install --registry https://registry.npmjs.org
         - npm link
         - cd $TRAVIS_BUILD_DIR/devops/test/client/jscoresdk
