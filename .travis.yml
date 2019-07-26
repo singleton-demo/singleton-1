@@ -28,7 +28,7 @@ jobs:
         - python $TRAVIS_BUILD_DIR/devops/sonar/config_sonar_project.py $SONAR_ORG:singleton-service:$TRAVIS_BRANCH $SONAR_ORG:singleton-service:$TRAVIS_BRANCH $SONAR_ORG service-gate $SONAR_TOKEN
         - cd $TRAVIS_BUILD_DIR/g11n-ws && sed -i "s/rootProject.name = 'vip'/rootProject.name = '$SONAR_ORG:singleton-service:$TRAVIS_BRANCH'/" settings.gradle && cat settings.gradle
         - cd $TRAVIS_BUILD_DIR/g11n-ws && ./gradlew sonarqube --stacktrace -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=$SONAR_ORG -Dsonar.branch.name=master --info
-        - cd $TRAVIS_BUILD_DIR/devops/sonar && chmod 777 checkSonarQualityGateByAPI && ./checkSonarQualityGateByAPI -ProjectKeyPrefixArray=$SONAR_ORG:singleton-service:$TRAVIS_BRANCH
+        - sleep 10 && cd $TRAVIS_BUILD_DIR/devops/sonar && python ./check_sonar_qualitygate.py -ProjectKeyPrefixArray=$SONAR_ORG:singleton-service:$TRAVIS_BRANCH
     - stage: auto test
       script:
         - git clone --branch=devops https://github.com/singleton-demo/singleton-1.git devops
@@ -38,6 +38,6 @@ jobs:
         - docker build -t singleton .
         - docker run -d -p 8090:8090 --name singleton singleton
         - docker ps
-        - cd $TRAVIS_BUILD_DIR/devops/autotest/server/APITest && gradle build
+        - cd $TRAVIS_BUILD_DIR/devops/autotest/service/i18n-service/APITest && gradle build
         - docker cp l10n singleton:/
         - java -cp "target/*:resource/*" org.testng.TestNG testng.xml
