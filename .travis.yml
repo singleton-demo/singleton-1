@@ -15,22 +15,22 @@ jobs:
       script:
         - npm install --registry https://registry.npmjs.org
         - npm run test
-        - npm link
     - stage: auto test
       script:
-        - git clone --branch=server https://github.com/singleton-demo/ci.git server
+        - git clone --branch=master https://github.com/singleton-demo/singleton-1.git service
         - git clone --branch=devops https://github.com/singleton-demo/singleton-1.git devops
-        - cd ./server/build && rm -rf ./BOOT-INF/classes/l10n/bundles/* && rm -f ./resources.zip
-        - cp -a ../../devops/test/bundles/JSCoreSDKTest ./BOOT-INF/classes/l10n/bundles/
-        - cd BOOT-INF/classes && zip -r ../../resources.zip l10n && cd ../..
-        - jar -cvf0m service.jar ./META-INF/MANIFEST.MF ./org/ ./BOOT-INF/ ./resources.zip
-        - cp service.jar ../
-        - cd ..
+        - mkdir -p service/g11n-ws/vip-manager-i18n/src/main/resources/l10n/bundles/
+        - cp -a devops/test/bundles/JSCoreSDKTest service/g11n-ws/vip-manager-i18n/src/main/resources/l10n/bundles/
+        - cd $TRAVIS_BUILD_DIR/service/g11n-ws && ./gradlew build
+        - cp $TRAVIS_BUILD_DIR/devops/deploy/i18n-service/Dockerfile $TRAVIS_BUILD_DIR/service/publish/
+        - cd $TRAVIS_BUILD_DIR/service/publish && mv vip-manager-i18n-*.jar i18n-service.jar
         - docker build -t singleton .
         - docker run -d -p 8090:8090 --name singleton singleton
         - docker ps
-        - cd ..
-        - cd test/client/jscoresdk
+        - cd $TRAVIS_BUILD_DIR
         - npm install --registry https://registry.npmjs.org
-        - npm link  @singleton/singleton-core-sdk
+        - npm link
+        - cd $TRAVIS_BUILD_DIR/devops/test/client/jscoresdk
+        - npm link @singleton/singleton-core-sdk
+        - npm install --registry https://registry.npmjs.org
         - ./node_modules/.bin/jest
