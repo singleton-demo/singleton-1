@@ -30,7 +30,7 @@ if __name__ == "__main__":
         print("quality gate id='%s'" % gate_id)
         #create multiple conditions
         print('3. Create conditions for quality gate')
-        data={'error':'0','gateId':gate_id, 'metric':'code_smells', 'op':'GT','organization':org_key}
+        data={'error':'1600','gateId':gate_id, 'metric':'code_smells', 'op':'GT','organization':org_key}
         res = requests.post("https://sonarcloud.io/api/qualitygates/create_condition", data=data, auth=auth)
         print(res.json())
 
