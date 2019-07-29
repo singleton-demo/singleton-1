@@ -33,6 +33,7 @@ jobs:
         - docker ps
         - cd $TRAVIS_BUILD_DIR
         - cd g11n-js-client
+        - sed -i 's:@vip/vip-core-sdk-server:@vip/vip-core-sdk-dev:' package.json
         - npm install --registry https://registry.npmjs.org
         - npm link
         - cd $TRAVIS_BUILD_DIR/devops/test/client/jscoresdk
