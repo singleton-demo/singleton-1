@@ -38,5 +38,5 @@ jobs:
         - npm link
         - cd $TRAVIS_BUILD_DIR/devops/test/client/jscoresdk
         - npm install --registry https://registry.npmjs.org
-        - npm link @vip/vip-core-sdk-server
+        - npm link @vip/vip-core-sdk-dev
         - ./node_modules/.bin/jest
