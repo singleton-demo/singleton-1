@@ -11,7 +11,7 @@ def request_check_sonar_quality(url):
     response = urllib.request.urlopen(req).read().decode("utf8")
     
     res = json.loads(response)
-    if res['projectStatus']['status'] == 'ERROR' != 'OK':
+    if res['projectStatus']['status'] != 'OK':
         raise Exception("ERROR: %s  qualitygate status is not OK" %url)
     
 def setReqHeader(requst):
