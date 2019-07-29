@@ -1,0 +1,22 @@
+dist: trusty
+language: node_js
+addons:
+  sonarcloud:
+    organization: $SONAR_ORG
+    token:
+      secure: $SONAR_TOKEN
+node_js:
+  - "7"
+python:
+  - "3.4"
+  
+before_install:  
+  - export CHROME_BIN=chromium-browser
+  
+jobs:
+  include:
+    - stage: unit test
+      script:
+        - sed -i "s/'Chrome'/'ChromeHeadless'/g" config/karma.conf.js
+        - npm install --registry https://registry.npmjs.org
+        - npm run test
