@@ -21,7 +21,7 @@ jobs:
         - git clone --branch=devops https://github.com/singleton-demo/singleton-1.git devops
         - mkdir -p service/g11n-ws/vip-manager-i18n/src/main/resources/l10n/bundles/
         - cp -a devops/test/bundles/JSCoreSDKTest service/g11n-ws/vip-manager-i18n/src/main/resources/l10n/bundles/
-        - cd $TRAVIS_BUILD_DIR/service/g11n-ws && ./gradlew build
+        - cd $TRAVIS_BUILD_DIR/service/g11n-ws && ./gradlew build -x test
         - cp $TRAVIS_BUILD_DIR/devops/deploy/i18n-service/Dockerfile $TRAVIS_BUILD_DIR/service/publish/
         - cd $TRAVIS_BUILD_DIR/service/publish && mv vip-manager-i18n-*.jar i18n-service.jar
         - docker build -t singleton .
