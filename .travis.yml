@@ -15,7 +15,7 @@ jobs:
       script:
         - npm install --registry https://registry.npmjs.org
         - npm run test
-    - stage: code scan
+    - .stage: code scan
       script:
         - npm install npm
         - npm install tslint
