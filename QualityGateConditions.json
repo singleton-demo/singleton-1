@@ -1,3 +1,0 @@
-{
-"conditions": [{'error':'1600','gateId':gate_id, 'metric':'code_smells', 'op':'GT','organization':org_key}]
-}
