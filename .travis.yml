@@ -23,7 +23,7 @@ jobs:
   include:
     - stage: unit test
       script:
-        - sed -i "s/'Chrome'/'ChromeHeadless'/g" config/karma.conf.js && cat conf/karma.conf.js
+        - sed -i "s/'Chrome'/'ChromeHeadless'/g" config/karma.conf.js && cat config/karma.conf.js
         - npm install --registry https://registry.npmjs.org
         - npm run test
     - stage: code scan
